@@ -13,10 +13,8 @@ class Ship{
 
     isSunk(){
         if (this.hits >= this.length){
-            console.log("This ship has been sunk.")
             return true;
         } else {
-            console.log("This ship is still afloat.")
             return false;
         }
     }
@@ -30,7 +28,8 @@ class Gameboard{
         this.grid = [];
         this.ships = [];
         this.miss = [];
-        this.floatingShips = 0;
+        this.activeShips = 0;
+        this.gameOver = false;
 
         for (let i = 0; i < 10; i++) {
             const row = [];
@@ -45,6 +44,9 @@ class Gameboard{
     placeShip(x, y, length, direction){
 
         const newShip = new Ship(length)
+
+        
+
         const coordinates = [];
         let noOverlap = true
 
@@ -83,9 +85,9 @@ class Gameboard{
         }
         
         this.ships.push({ ship: newShip, coordinates }); //Adds the ship and its coordinates to the ships array
-        this.floatingShips++;
+        this.activeShips++;
     
-        return true // Placement successful
+        return true
     }
 
     receiveAttack(x, y){
@@ -94,11 +96,14 @@ class Gameboard{
             for(let j = 0; j < this.ships[i].coordinates.length; j++) {
                 if(this.ships[i].coordinates[j][0] === x && this.ships[i].coordinates[j][1] === y){
                     this.ships[i].ship.hit()
-                    this.ships[i].coordinates.splice(j, 1)
+                    this.ships[i].coordinates.splice(j, 1) // removes orginal coordinates and adds an H to represent a hit.
                     this.grid[y][x] = 'H'
                     if (this.ships[i].ship.isSunk()) {
-                        this.floatingShips--;  
+                        this.activeShips--;  
                     }
+
+
+
                     
                     return true
                 }
@@ -110,9 +115,7 @@ class Gameboard{
     }
 
     status(){
-        if (this.floatingShips === 0){
-            return console.log("All your ships have been sunk. You lose.")
-        }
+        return this.activeShips === 0;
     }
 
 }
@@ -125,16 +128,5 @@ class Player{
    } 
 }
 
-const gameboard = new Gameboard();
-gameboard.placeShip(0, 0, 3, 'vertical');
-gameboard.placeShip(0, 1, 3, 'vertical');
-gameboard.receiveAttack(2, 3)
-gameboard.receiveAttack(3, 3)
-gameboard.receiveAttack(4, 3)
-gameboard.receiveAttack(5, 3)
-console.log(gameboard)
-console.log(gameboard.miss)
-console.log(gameboard.ships)
-console.log('This is the number of floating ships', gameboard.floatingShips)
 
 export {Gameboard, Player, Ship};

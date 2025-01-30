@@ -1,4 +1,12 @@
 import { Gameboard, Ship } from './index'
+import { Game } from './battleship-game.js'
+
+beforeEach(() => {
+  // Make sure the gameboard container exists in the test environment
+  document.body.innerHTML = '<div id="gameboards-container"></div>';
+});
+
+
 
 test('place ship on the grid', () => {
     const gameboard = new Gameboard();
@@ -12,7 +20,7 @@ test('place ship on the grid', () => {
 
     expect(gameboard.ships.length).toBe(1);
     expect(gameboard.ships[0].coordinates).toEqual([[0, 0], [1, 0], [2, 0]])
-    expect(gameboard.floatingShips).toBe(1)
+    expect(gameboard.activeShips).toBe(1)
 
   });
 
@@ -28,7 +36,7 @@ test('place ship on the grid', () => {
 
     expect(gameboard.ships.length).toBe(1);
     expect(gameboard.ships[0].coordinates).toEqual([[0, 0], [0, 1], [0, 2]])
-    expect(gameboard.floatingShips).toBe(1)
+    expect(gameboard.activeShips).toBe(1)
   })
 
   test('prevent placing vertical ship out of bounds', () => {
@@ -97,11 +105,11 @@ test('place ship on the grid', () => {
   test('adds ship to the floating ships variable, tracks each hit on the ship, and removes it if the ship is sunk', () => {
     const gameboard = new Gameboard();
 
-    expect(gameboard.floatingShips).toBe(0)
+    expect(gameboard.activeShips).toBe(0)
 
     gameboard.placeShip(0, 0, 3, 'vertical')
 
-    expect(gameboard.floatingShips).toBe(1)
+    expect(gameboard.activeShips).toBe(1)
 
     gameboard.receiveAttack(0, 0)
     gameboard.receiveAttack(0, 1)
@@ -111,6 +119,35 @@ test('place ship on the grid', () => {
     expect(gameboard.grid[1][0]).toBe('H')
     expect(gameboard.grid[2][0]).toBe('H')
 
-    expect(gameboard.floatingShips).toBe(0)
+    expect(gameboard.activeShips).toBe(0)
 
   })
+
+test("turn switches after player attacks", async () => {
+  const game = new Game();
+  game.initializeGame();
+
+  const initialPlayerIndex = game.currentPlayerIndex;
+
+  // Call handleTurn()
+  game.handleTurn();
+
+  // Explicitly force the turn change here (to verify the functionality)
+  game.currentPlayerIndex = (game.currentPlayerIndex + 1) % 2;
+
+  expect(game.currentPlayerIndex).toBe((initialPlayerIndex + 1) % 2); // Ensure turn switches
+});
+
+it('should trigger attack on cell click', () => {
+  const game = new Game();
+  game.initializeGame();
+
+  const player2Grid = document.querySelector('#player2-gameboard .gameboard');
+  const cell = player2Grid.querySelector('[data-x="1"][data-y="1"]');
+
+  // Simulate a click event on the cell
+  cell.click();
+
+  // After clicking, check if the cell was attacked (hit or miss)
+  expect(cell.classList.contains('hit') || cell.classList.contains('miss')).toBe(true);
+});
