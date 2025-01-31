@@ -8,6 +8,11 @@ body{
     height: 100vh;
 }
 
+h3 {
+    max-width: 500px;
+    word-wrap: break-word;
+}
+
 #gameboards-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -16,6 +21,101 @@ body{
     align-items: center;
     margin-top: 30px;
 }
+
+#ship-input-container {
+    grid-column: 1 / 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+}
+
+#player1-dropdown-container{
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+#player2-dropdown-container{
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+select{
+    width: 40px;
+    text-align: center;
+    justify-self: center;
+    align-self: center;
+}
+
+#player1-x-input{
+    margin-bottom: 5px;
+}
+
+#player1-y-input{
+    margin-bottom: 5px;
+}
+
+
+
+#player1-vertical-btn{
+    width: 70px;
+    justify-self: center;
+    align-self: center;
+}
+
+#player1-horizontal-btn{
+    width: 70px;
+    justify-self: center;
+    align-self: center;
+}
+
+#player1-btn-container{
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+#player2-x-input{
+    margin-bottom: 5px;
+}
+
+#player2-y-input{
+    margin-bottom: 5px;
+}
+
+#player2-vertical-btn{
+    width: 70px;
+    justify-self: center;
+    align-self: center;
+}
+
+#player2-horizontal-btn{
+    width: 70px;
+    justify-self: center;
+    align-self: center;
+}
+
+#player2-btn-container{
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+.start-game-button {
+    display: none;
+  }
 
 .ui-container{
     display: grid;
@@ -29,6 +129,7 @@ body{
 .cell.ship{
     background-color: green;
 }
+
 
 .cell.hit{
     background-color: red;
